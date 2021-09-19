@@ -1,0 +1,13 @@
+name: Live Deploy Workflow
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  live_deploy_job:
+    name: Live Server Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
