@@ -10,22 +10,16 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import os
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+SECRET_KEY = config('SECRET_KEY', default="SecretKey")
+DEBUG = bool(config('DEBUG', cast=int, default=1))
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-kr9xl%hd7t6cfzp^3+7swo&12tiyva8_e@+-c!v$-@!7(8(f(n'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -39,11 +33,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
-
+    'corsheaders',
     'api',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -79,8 +75,12 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': config('SQL_ENGINE', default="django.db.backends.postgresql"),
+        'NAME': config('SQL_DATABASE', default="db"),
+        'USER': config('SQL_USER', default="mehran"),
+        'PASSWORD': config('SQL_PASSWORD', default="3210"),
+        'HOST': config('SQL_HOST', default="172.17.0.1"),
+        'PORT': config('SQL_PORT', default="8082"),
     }
 }
 
@@ -121,9 +121,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+STATIC_DIR = os.path.join(BASE_DIR, 'assets')
+STATICFILES_DIRS = [STATIC_DIR, ]
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

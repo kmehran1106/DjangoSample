@@ -68,8 +68,22 @@ coverage.xml
 *.mo
 *.pot
 
-# Django stuff:
-*.log
+**/*.db
+**/*.log
+**/*.pyc
+**/*.swp
+**/local_settings.py
+**/.env
+**/db.sqlite3
+**/.idea/
+**/venv/
+**/.venv/
+**/static/
+**/media/
+**/logs/*.log
+**/logs/*
+**/.vscode/
+**/*_report.csv
 
 # Sphinx documentation
 docs/_build/
@@ -100,3 +114,4 @@ venv/
 # KIGS
 **/*.log
 logs/
+**/db/
